@@ -32,8 +32,6 @@ on y1.order_id = r3.order_id group by y1.order_date order by y1.order_date;
 select sub_category, sum(profit) as total_profit from purchase_details2 group by sub_category order by total_profit desc
 limit 10;
 
-select * from purchase_details1;
-
 select sub_category, sum(profit) as total_profit from purchase_details2 group by sub_category order by total_profit 
 limit 10;
 

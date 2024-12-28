@@ -5,6 +5,7 @@ import psycopg2
 
 
 queries = {
+
     "Top 10 highest revenue generating products": """
     select sub_category, sum(revenue) as total_revenue from purchase_details2 group by sub_category
     order by total_revenue desc limit 10;
@@ -53,7 +54,7 @@ queries = {
     select sub_category, sum(profit) as total_profit from purchase_details2 group by sub_category order by total_profit 
     limit 10;
     """,
-    "The top cites generating higest profit": """
+    "The top cites generating profit > 10000": """
     select city, sum(p1.profit) as total_profit from purchase_details1 c1 join purchase_details2 p1 on
     c1.order_id = p1.order_id group by c1.city having sum(p1.profit) > 10000;
     """,
@@ -76,21 +77,20 @@ def run_query(query):
         st.error(f"Error executing query: {e}")
         return pd.DataFrame()
     
-st.title("Retail order analysis ")
+st.title("Retail order analysis")
 
-tab_names = list(queries.keys())
-tabs = st.tabs(tab_names)
+query_options = ["Select a query"] + list(queries.keys())
+selected_query = st.selectbox("Choose a query to execute:", options=query_options)
 
-for i, tab_name in enumerate(tab_names):
-    with tabs[i]:
-        st.subheader(tab_name)
-        query = queries[tab_name]
-        df = run_query(query)  
-        if not df.empty:
-            st.dataframe(df)  
-        else:
-            st.warning("No data available for this query.")
+if selected_query != "Select a query":  
+    st.subheader(selected_query)
+    query = queries[selected_query]
+    df = run_query(query)
+    
+    if not df.empty:
+        st.dataframe(df)  
 
+            
 
 
 
