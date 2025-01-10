@@ -61,7 +61,34 @@ queries = {
     "The top 3 categories that generating lowest revenue": """
     select category, sum(revenue) as total_revenue from purchase_details1 c5 join purchase_details2 r3 on 
     c5.order_id = r3.order_id group by c5.category order by total_revenue limit 5;
-    """
+    """,
+    "The highest profit as per month": """
+    select date_part('month', order_date) as month, sum(p2.profit) as total_profit from purchase_details1 m1 join purchase_details2 p2
+    on m1.order_id = p2.order_id group by date_part('month', order_date) order by total_profit desc;
+    """,
+    "Highly saled categories": """
+    select sub_category, sum(b.quantity) as total_quantity from purchase_details1 a join purchase_details2 b 
+    on a.order_id = b.order_id group by sub_category order by total_quantity desc;
+    """,
+    "Top 3 revenue particitation by ship mode": """
+    select sm.ship_mode, sum(r4.revenue) as total_revenue, (sum(r4.revenue) * 100.0 / sum(sum(r4.revenue)) over()) as
+    revenue_percentage from purchase_details1 sm join purchase_details2 r4 on sm.order_id = r4.order_id group by 
+    m.ship_mode order by total_revenue desc limit 3;
+    """,
+    "Top 5 Highest revenue generating state": """
+    select sm.ship_mode, sum(r4.revenue) as total_revenue, (sum(r4.revenue) * 100.0 / sum(sum(r4.revenue)) over()) as
+    revenue_percentage from purchase_details1 sm join purchase_details2 r4 on sm.order_id = r4.order_id group by 
+    m.ship_mode order by total_revenue desc limit 3;
+    """,
+    "Revenue by segment": """
+    select state, sum(r5.revenue) as total_revenue from purchase_details1 s3 join purchase_details2 r5 on
+    s3.order_id = r5.order_id group by state order by total_revenue desc limit 5;
+""",
+
+    "discount impact on revenue": """
+    select sum (case when discount_percent > 0 then revenue else 0 end) as discounted_revenue, 
+    sum (case when discount_percent = 0 then revenue else 0 end) as non_discounted_revenue from order_details2;
+"""
 }
 
 
